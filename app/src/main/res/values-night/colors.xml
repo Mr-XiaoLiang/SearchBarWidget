@@ -8,6 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="search_bar_stroke">#FFFFFFFF</color>
-    <color name="search_bar_background">#FFFFFFFF</color>
+    <color name="search_bar_stroke">#FF333333</color>
+    <color name="search_bar_background">#FF333333</color>
 </resources>

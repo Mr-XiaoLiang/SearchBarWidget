@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.lollipop.searchbar.MainActivity"
+    android:initialKeyguardLayout="@layout/widget_search_bar_bottom"
+    android:initialLayout="@layout/widget_search_bar_bottom"
+    android:minWidth="40dp"
+    android:minHeight="32dp"
+    android:previewImage="@drawable/preview_countdown"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen|keyguard" />
