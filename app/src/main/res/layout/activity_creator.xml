@@ -1,72 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="0px"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="488dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/previewGroup"
-            android:layout_width="match_parent"
-            android:layout_height="160dp" />
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="488dp">
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="@color/theme_first"
+                app:navigationIconTint="@color/theme_first_on"
+                app:titleTextColor="@color/theme_first_on"
+                tools:title="@string/app_name" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/labelInputLayout"
-                    style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+            <FrameLayout
+                android:id="@+id/previewGroup"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@color/theme_first"
+                android:paddingHorizontal="16dp" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="16dp"
-                    tools:visibility="gone">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/labelInputEdit"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/labelInputLayout"
+                        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_label"
-                        tools:text="@string/app_name" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp">
 
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/alphaSlider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="16dp"
-                    android:stepSize="1.0"
-                    android:value="70"
-                    android:valueFrom="0"
-                    android:valueTo="100"
-                    app:thumbColor="@color/theme_first_on"
-                    app:thumbElevation="0dp"
-                    app:thumbRadius="6dp"
-                    app:tickVisible="false"
-                    app:trackColorActive="@color/theme_first"
-                    app:trackHeight="24dp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/labelInputEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_label"
+                            tools:text="@string/app_name"
+                            tools:visibility="invisible" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/alphaSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:contentDescription="@string/background_alpha"
+                        android:stepSize="1.0"
+                        android:value="70"
+                        android:valueFrom="0"
+                        android:valueTo="100"
+                        app:thumbColor="@color/theme_first_on"
+                        app:thumbElevation="0dp"
+                        app:thumbRadius="6dp"
+                        app:tickVisible="false"
+                        app:trackColorActive="@color/theme_first"
+                        app:trackHeight="24dp" />
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/intentExtraInputLayout"
+                        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp">
 
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/intentExtraInputEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_extra"
+                            tools:text="@string/app_name"
+                            tools:visibility="invisible" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:maxWidth="320dp"
+                        android:paddingVertical="12dp"
+                        android:text="@string/save"
+                        android:textColor="@color/theme_first_on"
+                        android:textSize="16sp"
+                        app:backgroundTint="@color/theme_first" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/sideSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:behavior_draggable="true"
+        app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior">
+
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@drawable/bg_side_sheet"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
+
+            <ImageView
+                android:id="@+id/sideSheetCloseButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/close"
+                android:padding="12dp"
+                android:src="@drawable/ic_baseline_close_24"
+                app:tint="@color/theme_first" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/appListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

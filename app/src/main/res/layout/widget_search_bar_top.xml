@@ -27,7 +27,10 @@
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
+                android:lines="1"
+                android:maxLines="1"
                 android:minHeight="48dp"
                 android:paddingLeft="16dp"
                 android:paddingTop="6dp"
@@ -44,7 +47,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="0px"
                 android:layout_marginEnd="16dp"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter" />
 
         </LinearLayout>
 

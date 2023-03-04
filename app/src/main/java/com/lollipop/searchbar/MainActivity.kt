@@ -5,31 +5,18 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.lollipop.searchbar.creator.BaseCreatorActivity
 import com.lollipop.searchbar.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_creator)
-//        updateWidget()
-    }
+class MainActivity : BaseCreatorActivity() {
 
-    private fun updateWidget() {
-        val widgetId = intent.getIntExtra(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        )
-        val dbUtil = WidgetDBUtil(this)
-        val widgetBean = SearchBarInfo(0, widgetId, "", "", "HelloWorld", 0.5F)
-        dbUtil.insert(widgetBean)
-        dbUtil.close()
+    override val widgetLayoutId: Int
+        get() = R.layout.widget_search_bar_center
 
-        val appWidgetManager = AppWidgetManager.getInstance(this)
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_creator)
+////        updateWidget()
+//    }
 
-        WidgetUtil.update(this, widgetBean, R.layout.widget_search_bar_bottom, appWidgetManager)
-
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetBean.widgetId)
-        setResult(Activity.RESULT_OK, resultValue)
-    }
 }

@@ -7,6 +7,8 @@
     <color name="theme_first">#FF018786</color>
     <color name="theme_secondary">#30A16C</color>
 
-    <color name="theme_first_on">#D5D6D6</color>
-    <color name="theme_secondary_on">#CDD1CF</color>
+    <color name="theme_first_on">#FFFFFF</color>
+    <color name="theme_secondary_on">#FFFFFF</color>
+
+    <color name="sheet_color">#FFFFFF</color>
 </resources>

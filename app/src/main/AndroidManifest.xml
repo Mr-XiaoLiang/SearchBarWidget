@@ -19,6 +19,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".creator.TopCreatorActivity"
+            android:exported="true" />
+        <activity
+            android:name=".creator.CenterCreatorActivity"
+            android:exported="true" />
+        <activity
+            android:name=".creator.BottomCreatorActivity"
+            android:exported="true" />
+
         <receiver
             android:name=".provider.SearchBarTopWidgetProvider"
             android:exported="true">
