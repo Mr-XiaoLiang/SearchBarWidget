@@ -77,7 +77,27 @@
                         app:trackColorActive="@color/theme_first"
                         app:trackHeight="24dp" />
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/intentInputLayout"
+                        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                        app:endIconTint="@color/theme_first">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/intentInputEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_intent"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:inputType="none"
+                            tools:text="SearchBarWidget\ncom.app.MainActivity" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/intentExtraInputLayout"

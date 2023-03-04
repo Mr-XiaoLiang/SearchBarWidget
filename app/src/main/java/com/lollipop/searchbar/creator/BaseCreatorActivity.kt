@@ -57,11 +57,12 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
         binding.sideSheet.setOnClickListener {
             binding.sideSheetCloseButton.callOnClick()
         }
-        binding.saveButton.setOnClickListener {
-            sideSheetBehavior.state = SideSheetBehavior.STATE_EXPANDED
-        }
         binding.sideSheetCloseButton.setOnClickListener {
             sideSheetBehavior.state = SideSheetBehavior.STATE_HIDDEN
+        }
+        binding.intentInputEdit.keyListener = null
+        binding.intentInputEdit.setOnClickListener {
+            sideSheetBehavior.state = SideSheetBehavior.STATE_EXPANDED
         }
 
         onSearchBarChanged()
