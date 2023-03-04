@@ -56,8 +56,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_label"
-                            tools:text="@string/app_name"
-                            tools:visibility="invisible" />
+                            tools:text="@string/app_name" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.slider.Slider
@@ -78,6 +77,8 @@
                         app:trackColorActive="@color/theme_first"
                         app:trackHeight="24dp" />
 
+
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/intentExtraInputLayout"
                         style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
@@ -91,8 +92,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/hint_extra"
-                            tools:text="@string/app_name"
-                            tools:visibility="invisible" />
+                            tools:text="@string/app_name" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
