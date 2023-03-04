@@ -35,6 +35,10 @@ class WidgetDBUtil(
         SearchBar.deleteByWidgetId(writeDb, widgetId)
     }
 
+    fun insert(info: SearchBarInfo) {
+        SearchBar.insert(writeDb, info)
+    }
+
     private object SearchBar : Table() {
         override val tableName: String = "SEARCH_BAR_TABLE"
         override val columns: Array<out ColumnEnum>

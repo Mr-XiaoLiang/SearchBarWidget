@@ -24,23 +24,25 @@ object WidgetUtil {
     ) {
         val views = RemoteViewInterface(RemoteViews(context.packageName, layoutId))
         updateUI(widgetBean, views)
-        //创建点击意图
-        val intent = Intent.parseUri(widgetBean.intent, Intent.URI_INTENT_SCHEME)
-        //请求ID重复会导致延时意图被覆盖，刷新模式表示覆盖的方式
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            widgetBean.widgetId,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        //为小部件设置点击事件
-        views.target.setOnClickPendingIntent(R.id.widgetBody, pendingIntent)
+        if (widgetBean.intent.isNotEmpty()) {
+            //创建点击意图
+            val intent = Intent.parseUri(widgetBean.intent, Intent.URI_INTENT_SCHEME)
+            //请求ID重复会导致延时意图被覆盖，刷新模式表示覆盖的方式
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                widgetBean.widgetId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            //为小部件设置点击事件
+            views.target.setOnClickPendingIntent(R.id.widgetBody, pendingIntent)
+        }
         appWidgetManager.updateAppWidget(widgetBean.widgetId, views.target)
     }
 
     fun updateUI(widgetBean: SearchBarInfo, views: ViewInterface) {
         views.setAlpha(R.id.backgroundView, widgetBean.background)
-        views.setTextViewText(R.id.backgroundView, widgetBean.content)
+        views.setTextViewText(R.id.textView, widgetBean.content)
         views.setImageViewBitmap(R.id.iconView, widgetBean.icon)
     }
 
@@ -70,8 +72,12 @@ object WidgetUtil {
 
     class NativeViewInterface(private val views: View) : ViewInterface() {
 
-        private fun <T : View> Int.find(): T? {
-            return views.findViewById<T>(this)
+        private inline fun <reified T : View> Int.find(): T? {
+            val view = views.findViewById<View>(this)
+            if (view is T) {
+                return view
+            }
+            return null
         }
 
         override fun setImageViewBitmap(id: Int, path: String) {
