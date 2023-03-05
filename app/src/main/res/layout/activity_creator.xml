@@ -70,6 +70,7 @@
                         android:value="70"
                         android:valueFrom="0"
                         android:valueTo="100"
+                        android:visibility="gone"
                         app:thumbColor="@color/theme_first_on"
                         app:thumbElevation="0dp"
                         app:thumbRadius="6dp"
@@ -84,17 +85,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="16dp"
-                        app:endIconMode="custom"
                         app:endIconDrawable="@drawable/ic_baseline_arrow_drop_down_24"
+                        app:endIconMode="custom"
                         app:endIconTint="@color/theme_first">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/intentInputEdit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hint_intent"
                             android:editable="false"
                             android:focusable="false"
+                            android:hint="@string/hint_intent"
                             android:inputType="none"
                             tools:text="SearchBarWidget\ncom.app.MainActivity" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +106,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/intentExtraInputEdit"

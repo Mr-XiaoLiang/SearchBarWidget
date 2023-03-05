@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="search_bar_stroke">#FF333333</color>
-    <color name="search_bar_background">#FF333333</color>
+    <color name="search_bar_background">#D2333333</color>
     <color name="search_bar_text">#C5D5D5</color>
 
     <color name="theme_first">#015756</color>
@@ -11,4 +11,7 @@
     <color name="theme_secondary_on">#A3A3A3</color>
 
     <color name="sheet_color">#3C3C3C</color>
+
+    <color name="text_first">#EFEFEF</color>
+    <color name="text_secondary">#CFCFCF</color>
 </resources>

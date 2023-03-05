@@ -46,7 +46,8 @@ class WidgetDBUtil(
 
         enum class Columns(override val format: ColumnFormat) : ColumnEnum {
             WIDGET_ID(ColumnFormat.INTEGER),
-            INTENT(ColumnFormat.TEXT),
+            PKG(ColumnFormat.TEXT),
+            ACTIVITY(ColumnFormat.TEXT),
             ICON(ColumnFormat.TEXT),
             CONTENT(ColumnFormat.TEXT),
             BACKGROUND(ColumnFormat.FLOAT),
@@ -60,7 +61,8 @@ class WidgetDBUtil(
                 SearchBarInfo(
                     id = it.getIntByName(idColumn),
                     widgetId = it.getIntByName(Columns.WIDGET_ID),
-                    intent = it.getTextByName(Columns.INTENT),
+                    packageName = it.getTextByName(Columns.PKG),
+                    activityName = it.getTextByName(Columns.ACTIVITY),
                     icon = it.getTextByName(Columns.ICON),
                     content = it.getTextByName(Columns.CONTENT),
                     background = it.getFloatByName(Columns.BACKGROUND),
@@ -86,13 +88,8 @@ class WidgetDBUtil(
             val insert = db.insert(
                 tableName,
                 null,
-                ContentValues().apply {
-                    putValue(Columns.WIDGET_ID, info.widgetId)
-                    putValue(Columns.ICON, info.icon)
-                    putValue(Columns.INTENT, info.intent)
-                    putValue(Columns.CONTENT, info.content)
-                    putValue(Columns.BACKGROUND, info.background)
-                })
+                getContentValues(info)
+            )
             if (insert >= 0) {
                 return selectLastId(tableName, idColumn, db)
             }
@@ -102,16 +99,21 @@ class WidgetDBUtil(
         fun update(db: SQLiteDatabase, info: SearchBarInfo) {
             db.update(
                 tableName,
-                ContentValues().apply {
-                    putValue(Columns.WIDGET_ID, info.widgetId)
-                    putValue(Columns.ICON, info.icon)
-                    putValue(Columns.INTENT, info.intent)
-                    putValue(Columns.CONTENT, info.content)
-                    putValue(Columns.BACKGROUND, info.background)
-                },
+                getContentValues(info),
                 "$idColumn = ?",
                 arrayOf(info.id.toString())
             )
+        }
+
+        private fun getContentValues(info: SearchBarInfo): ContentValues {
+            return ContentValues().apply {
+                putValue(Columns.WIDGET_ID, info.widgetId)
+                putValue(Columns.ICON, info.icon)
+                putValue(Columns.PKG, info.packageName)
+                putValue(Columns.ACTIVITY, info.activityName)
+                putValue(Columns.CONTENT, info.content)
+                putValue(Columns.BACKGROUND, info.background)
+            }
         }
 
         fun deleteByWidgetId(db: SQLiteDatabase, id: Int) {
