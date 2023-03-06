@@ -6,4 +6,7 @@
     <string name="background_alpha">透明度</string>
     <string name="close">关闭</string>
     <string name="hint_intent">点击意图</string>
+    <string name="hint_select_search_bar_icon">建议选择200*200以下的图片</string>
+    <string name="choose">选择</string>
+    <string name="clear">清除</string>
 </resources>
