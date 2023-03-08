@@ -16,11 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.sidesheet.SideSheetBehavior
 import com.google.android.material.slider.Slider
+import com.lollipop.filechooser.FileChooseResult
+import com.lollipop.filechooser.FileChooser
+import com.lollipop.filechooser.FileMime
 import com.lollipop.searchbar.SearchBarInfo
 import com.lollipop.searchbar.WidgetDBUtil
 import com.lollipop.searchbar.WidgetUtil
 import com.lollipop.searchbar.databinding.ActivityCreatorBinding
 import com.lollipop.searchbar.databinding.ItemAppInfoBinding
+import java.io.File
 
 abstract class BaseCreatorActivity : AppCompatActivity() {
 
@@ -45,6 +49,12 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
     private var selectedAppInfo: AppInfo? = null
 
     private val appList = ArrayList<AppInfo>()
+
+    private val fileChooser = FileChooser.registerChooserLauncher(getThis(), ::onFileChooseResult)
+
+    private fun getThis(): BaseCreatorActivity {
+        return this
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,8 +101,80 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
             createWidget()
             onBackPressed()
         }
-
+        binding.selectIconChooseBtn.setOnClickListener {
+            fileChooser.launch().type(FileMime.Image.ALL).start()
+        }
+        binding.selectIconClearBtn.setOnClickListener {
+            clearIconFile()
+            onSearchBarChanged()
+        }
         onSearchBarChanged()
+    }
+
+    private fun onFileChooseResult(result: FileChooseResult) {
+        when (result) {
+            FileChooseResult.Empty -> {}
+            is FileChooseResult.Multiple -> {
+                clearIconFile()
+                doAsync {
+                    val iconFile = createIconFile()
+                    result.save(getThis(), 0, iconFile)
+                    onUI {
+                        widgetBean.icon = iconFile.path
+                        onSearchBarChanged()
+                    }
+                }
+            }
+            is FileChooseResult.Single -> {
+                clearIconFile()
+                doAsync {
+                    val iconFile = createIconFile()
+                    result.save(getThis(), iconFile)
+                    onUI {
+                        widgetBean.icon = iconFile.path
+                        onSearchBarChanged()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun clearIconFile() {
+        val icon = widgetBean.icon
+        if (icon.isEmpty()) {
+            return
+        }
+        widgetBean.icon = ""
+        doAsync {
+            val file = File(icon)
+            if (file.exists()) {
+                file.delete()
+            }
+        }
+    }
+
+    private fun createIconFile(): File {
+        return File(filesDir, System.currentTimeMillis().toString(16))
+    }
+
+    private fun doAsync(callback: () -> Unit) {
+        Thread {
+            try {
+                callback()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
+    protected fun onUI(callback: () -> Unit) {
+        runOnUiThread {
+            try {
+                callback()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
