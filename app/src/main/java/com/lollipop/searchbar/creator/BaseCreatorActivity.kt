@@ -5,6 +5,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,17 +15,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.sidesheet.SideSheetBehavior
 import com.google.android.material.slider.Slider
 import com.lollipop.filechooser.FileChooseResult
 import com.lollipop.filechooser.FileChooser
 import com.lollipop.filechooser.FileMime
+import com.lollipop.searchbar.R
 import com.lollipop.searchbar.SearchBarInfo
 import com.lollipop.searchbar.WidgetDBUtil
 import com.lollipop.searchbar.WidgetUtil
 import com.lollipop.searchbar.databinding.ActivityCreatorBinding
 import com.lollipop.searchbar.databinding.ItemAppInfoBinding
 import java.io.File
+import kotlin.math.sqrt
 
 abstract class BaseCreatorActivity : AppCompatActivity() {
 
@@ -115,26 +120,86 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
         when (result) {
             FileChooseResult.Empty -> {}
             is FileChooseResult.Multiple -> {
-                clearIconFile()
-                doAsync {
-                    val iconFile = createIconFile()
-                    result.save(getThis(), 0, iconFile)
-                    onUI {
-                        widgetBean.icon = iconFile.path
-                        onSearchBarChanged()
+                if (result.size > 0) {
+                    saveBitmap {
+                        result.save(getThis(), 0, it)
                     }
                 }
             }
             is FileChooseResult.Single -> {
-                clearIconFile()
-                doAsync {
-                    val iconFile = createIconFile()
-                    result.save(getThis(), iconFile)
-                    onUI {
-                        widgetBean.icon = iconFile.path
-                        onSearchBarChanged()
-                    }
+                saveBitmap {
+                    result.save(getThis(), it)
                 }
+            }
+        }
+    }
+
+    private fun onIconSelected(checkResult: BitmapCheckResult) {
+        when (checkResult) {
+            BitmapCheckResult.Error -> {
+                widgetBean.icon = ""
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(R.string.dialog_message_error)
+                    .setPositiveButton(R.string.known) { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }
+            is BitmapCheckResult.Oversize -> {
+                widgetBean.icon = ""
+                val maxPixels = WidgetUtil.BITMAP_SIZE_MAX / 4
+                val sqrtPixels = sqrt(maxPixels.toDouble()).toInt()
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_title_error)
+                    .setMessage(
+                        getString(
+                            R.string.dialog_message_oversize,
+                            maxPixels,
+                            checkResult.byteCount,
+                            sqrtPixels
+                        )
+                    )
+                    .setPositiveButton(R.string.known) { dialog, _ -> dialog.dismiss() }
+                    .show()
+            }
+            is BitmapCheckResult.Qualified -> {
+                widgetBean.icon = checkResult.iconFile.path
+            }
+        }
+        onSearchBarChanged()
+    }
+
+    private fun checkBitmapSize(file: File): BitmapCheckResult {
+        var bitmap: Bitmap? = null
+        try {
+            bitmap = WidgetUtil.getBitmap(file.path)
+            bitmap ?: return BitmapCheckResult.Error
+            if (bitmap.byteCount >= WidgetUtil.BITMAP_SIZE_MAX) {
+                return BitmapCheckResult.Oversize(bitmap.byteCount)
+            }
+            return BitmapCheckResult.Qualified(file)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            return BitmapCheckResult.Error
+        } finally {
+            try {
+                bitmap?.recycle()
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun saveBitmap(saveCallback: (File) -> Unit) {
+        clearIconFile()
+        doAsync {
+            val iconFile = createIconFile()
+            saveCallback(iconFile)
+            val checkResult = checkBitmapSize(iconFile)
+            if (checkResult !is BitmapCheckResult.Qualified) {
+                iconFile.delete()
+            }
+            onUI {
+                onIconSelected(checkResult)
             }
         }
     }
@@ -157,7 +222,7 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
         return File(filesDir, System.currentTimeMillis().toString(16))
     }
 
-    private fun doAsync(callback: () -> Unit) {
+    protected fun doAsync(callback: () -> Unit) {
         Thread {
             try {
                 callback()
@@ -197,6 +262,11 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
     private fun onSearchBarChanged() {
         val view = widgetView ?: return
         WidgetUtil.updateUI(widgetBean, view)
+        if (widgetBean.icon.isEmpty()) {
+            binding.selectIconImageView.setImageDrawable(null)
+        } else {
+            Glide.with(this).load(widgetBean.icon).into(binding.selectIconImageView)
+        }
     }
 
     private fun createWidget() {
@@ -263,6 +333,12 @@ abstract class BaseCreatorActivity : AppCompatActivity() {
         } else {
             cls
         }
+    }
+
+    private sealed class BitmapCheckResult {
+        object Error : BitmapCheckResult()
+        class Oversize(val byteCount: Int) : BitmapCheckResult()
+        class Qualified(val iconFile: File) : BitmapCheckResult()
     }
 
     private class AppAdapter(

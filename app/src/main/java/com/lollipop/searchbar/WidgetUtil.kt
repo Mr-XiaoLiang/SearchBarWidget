@@ -13,6 +13,8 @@ import java.io.File
 
 object WidgetUtil {
 
+    const val BITMAP_SIZE_MAX = 12441600
+
     fun update(
         context: Context,
         widgetBean: SearchBarInfo,
@@ -53,19 +55,6 @@ object WidgetUtil {
         abstract fun setImageViewBitmap(id: Int, path: String)
         abstract fun setAlpha(id: Int, alpha: Float)
         abstract fun setTextViewText(id: Int, text: CharSequence)
-
-        protected fun getBitmap(path: String): Bitmap? {
-            try {
-                val image = File(path)
-                if (path.isEmpty() || !image.exists()) {
-                    return null
-                }
-                return BitmapFactory.decodeFile(image.path)
-            } catch (e: Throwable) {
-                e.printStackTrace()
-            }
-            return null
-        }
 
     }
 
@@ -113,6 +102,19 @@ object WidgetUtil {
             views.setTextViewText(id, text)
         }
 
+    }
+
+    fun getBitmap(path: String): Bitmap? {
+        try {
+            val image = File(path)
+            if (path.isEmpty() || !image.exists()) {
+                return null
+            }
+            return BitmapFactory.decodeFile(image.path)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
+        return null
     }
 
 }

@@ -9,4 +9,8 @@
     <string name="hint_select_search_bar_icon">建议选择200*200以下的图片</string>
     <string name="choose">选择</string>
     <string name="clear">清除</string>
+    <string name="dialog_title_error">出错了</string>
+    <string name="dialog_message_error">图片解析出现错误,请尝试更换图片</string>
+    <string name="known">知道了</string>
+    <string name="dialog_message_oversize">图片体积超过 Android 系统要求的大小，建议选择更小的图片。\n图片最大像素数量为 %1$d\n当前图片的像素数量为 %2$d\n建议的最大分辨率为 %3$d x %3$d</string>
 </resources>
