@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SearchBarWidget</string>
+    <string name="app_name">桌面搜索框</string>
     <string name="hint_label">提示内容</string>
     <string name="save">保存</string>
     <string name="hint_extra">扩展信息</string>
